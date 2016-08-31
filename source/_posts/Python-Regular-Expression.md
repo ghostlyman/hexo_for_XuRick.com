@@ -6,6 +6,7 @@ tags:
 
 Reference to:
 [runoob](http://www.runoob.com/python/python-reg-expressions.html)
+[cnblogs](http://www.cnblogs.com/huxi/archive/2010/07/04/1771073.html)
 
 
 ## Python 正则表达式
@@ -46,8 +47,51 @@ a = re.compile(r'\d+\.|d*')
 - string	要匹配的字符串
 - flags		标志位，用于控制表达式方式，是否区分大小写等
 
-> group(num=0) 匹配整个表达式的字符串
-> groups()  一次可以输入多个组号，返回一个包含所有小组字符串的远足，从1到所含的小组号
+> * 方法
+> group([group1, ...]) 获得一个或多个分组的字符串，指定多个参数时将以元组形式返回。group1可以使用编号也可以使用别名。编号0表整个字符串，不写参数放回group(0), 没有截获字符串的组返回None，截获多次组返回最后一次字串。
+> groups()  以元组的形式返回全部分组截获的字符串。相当于调用了group(1,2,...last),default表示没有截获字符串的组，默认为None。
+> groupdict([default]) 返回以有别名的组的别名为键，以该组截获的字串值为字典，没有别名的组不包含在内
+> start([group]) 返回指定的组截获的字串在string的起始索引，group默认值为0
+> end([group])  返回指定的组截获的字串在string的结束索引， group默认值为0 
+> span([group]) 返回(start(group), end(group))
+> expand(template) 将匹配到分组代入template中后返回。
+
+- e.g.
+```python
+import re
+m = re.match(r'(\w+) (\w+)(?P<sign>.*)', 'hello world')
+# \w 匹配包括下划线的任何单词字符， 字母或数字或下划线或汉字。
+# 等价于「[A-Za-z0-9_]」。\b\w{6}\b 匹配刚好6个字符的单词。
+
+print('m.string: ', m.string)
+print('m.re: ', m.re)
+print('m.pos: ', m.pos)
+print('m.endpos: ',m.endpos)
+print('m.lastindex: ', m.lastindex)
+print('m.lastgroup: ', m.lastgroup)
+print('m.group(1, 2): ', m.group(1, 2))
+print('m.groups(): ', m.groups())
+print('m.groupdict(): ', m.groupdict())
+print('m.start(2): ', m.start(2))
+print('m.end(2): ', m.end(2))
+print('m.span(2): ', m.span(2))
+print(r"m.expand(r'\2 \1\3'): ", m.expand(r'\2 \1\3'))
+
+> 
+m.string:  hello world
+m.re:  re.compile('(\\w+) (\\w+)(?P<sign>.*)')
+m.pos:  0
+m.endpos:  11
+m.lastindex:  3
+m.lastgroup:  sign
+m.group(1, 2):  ('hello', 'world')
+m.groups():  ('hello', 'world', '')
+m.groupdict():  {'sign': ''}
+m.start(2):  6
+m.end(2):  11
+m.span(2):  (6, 11)
+m.expand(r'\2 \1\3'):  world hello
+```
 
 
 - e.g. 
@@ -173,6 +217,30 @@ print('Date2 of today: ', date2)
 >
 Date1 of today:  2016-08-28
 Date2 of today:  20160828
+```
+
+#### Patter
+> * Pattern 对象是一个编译好的正则表达式，通过pattern提供的一系列方法对文本进行匹配查找
+> * Pattern不能直接实例化，必须使用re.compile进行构造
+> * Pattern提供一下可读属性获取表达式
+> 1. pattern：编译时用的表达式字符串
+> 2. flags：编译时用的匹配模式，数字形式
+> 3. groups：表达式中分组的数量
+> 4. groupindex：以表达式中有别名的组的别名为键，以该组对应的编号为值的字典，没有别名的组不包含在内
+
+```python
+import re
+p = re.compile(r'(\w+) (\w+)(?P<sign>.*)', re.DOTALL)
+
+print('p.pattern: ', p.pattern)
+print('p.flags: ', p.flags)
+print('p.groups: ', p.groups)
+print('p.groupindex: ', p.groupindex)
+>
+p.pattern:  (\w+) (\w+)(?P<sign>.*)
+p.flags:  48
+p.groups:  3
+p.groupindex:  {'sign': 3}
 ```
 
 
