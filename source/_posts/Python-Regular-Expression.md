@@ -219,7 +219,7 @@ Date1 of today:  2016-08-28
 Date2 of today:  20160828
 ```
 
-#### Patter
+#### Pattern
 > * Pattern 对象是一个编译好的正则表达式，通过pattern提供的一系列方法对文本进行匹配查找
 > * Pattern不能直接实例化，必须使用re.compile进行构造
 > * Pattern提供一下可读属性获取表达式
@@ -243,4 +243,31 @@ p.groups:  3
 p.groupindex:  {'sign': 3}
 ```
 
+
+#### match
+> match (string[, post[, endpos]]) | re.match(pattern, string[, flags])
+> * 从string的pos下标开始匹配pattern；pattern结束时仍然可以匹配，返回match对象；无法匹配或匹配未结束就达到endpos，返回None
+> pos默认值为0
+> endpos默认值是len(string)
+> re.match() 无法指定这两个参数,参数flags用于编译指定pattern的匹配模式
+
+#### search
+> search (string[, pos[, endpos]]) | re.search(pattern, string[, flags])
+> * 用于查找字符串匹配成功的字串；pattern结束时仍然可以匹配，返回Match对象；无法匹配，将pos加1后尝试；直到pos=endpos 仍然无法匹配返回None
+> post 默认值为0
+> endpos 默认值为len(string)
+> re.search() 无法指定这两个参数，参数flags用于编译指定pattern的匹配模式
+
+```python
+import re
+
+pattern = re.compile(r'world') #将正则表达式编译成pattern对象
+
+match = pattern.search('hello world')
+
+if match:
+    print(match.group()) #使用match获得分组信息
+> 
+world
+```
 
