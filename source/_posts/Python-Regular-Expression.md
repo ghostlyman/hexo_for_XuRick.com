@@ -271,3 +271,92 @@ if match:
 world
 ```
 
+#### split
+> split(string[, maxsplit]) | re.split(pattern, string[, maxsplit])
+> * 能够匹配字串将string 分割后返回列表。maxsplit用于指定最大分割次数，不指定将全部分割
+
+```python
+import re
+
+p = re.compile(r'\d+')
+print(p.split('one1two2three3four4'))
+>
+['one', 'two', 'three', 'four', '']
+```
+
+#### findall
+> findall(string[, pos[, endpos]]) | re.findall(pattern, string[, flags]): 
+> * 搜索string，以列表形式返回全部能匹配的子串。 
+
+```python
+import re
+
+p = re.compile(r'\d+')
+print(p.findall('one1two2three3four4'))
+>
+['1', '2', '3', '4']
+```
+
+#### finditer
+> finditer(string[, pos[, endpos]]) | re.finditer(pattern, string[, flags]): 
+> * 搜索string，返回一个顺序访问每一个匹配结果（Match对象）的迭代器。 
+
+```python
+import re
+p = re.compile(r'\d+')
+
+for m in p.finditer('one1two2three3four4'):
+    print(m.group())
+>
+1
+2
+3
+4
+```
+
+#### sub
+> sub(repl, string[, count]) | re.sub(pattern, repl, string[, count]):
+> * 使用repl替换string中每一个匹配的子串后返回替换后的字符串。 
+> * 当repl是一个字符串时，可以使用\id或\g<id>、\g<name>引用分组，但不能使用编号0。 
+> * 当repl是一个方法时，这个方法应当只接受一个参数（Match对象），并返回一个字符串用于替换（返回的字符串中不能再引用分组）。 
+> * count用于指定最多替换次数，不指定时全部替换。 
+
+```python
+import re
+
+p = re.compile(r'(\w+) (\w+)')
+s = "I say, Hello World!"
+
+print(p.sub(r'\2 \1', s))
+
+def func(m):
+    return m.group(1).title() + ' ' + m.group(2).title()
+
+print(p.subn(func, s))
+>
+say I, World Hello!
+('I Say, Hello World!', 2)
+```
+
+#### subn
+> subn(repl, string[, count]) |re.sub(pattern, repl, string[, count]): 
+> * 返回 (sub(repl, string[, count]), 替换次数)。 
+
+```python
+import re
+
+p = re.compile(r'(\w+) (\w+)')
+s = "I say, Hello World"
+
+print(p.subn(r'\2 \1', s))
+
+def func(m):
+    return m.group(1).title() + ' ' + m.group(2).title()
+
+print(p.subn(func, s))
+>
+('say I, World Hello', 2)
+('I Say, Hello World', 2)
+```
+
+

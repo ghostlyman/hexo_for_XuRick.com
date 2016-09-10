@@ -434,5 +434,258 @@ p.SayHi()              #调用类Person的成员函数SayHi()
 > 
 hi
 ```
+```python
+class MyString:
+    str = "MyString"
+    def output(self):
+        print(self.str)
+
+s = MyString()
+s.output()
+>
+MyString
+```
+
+#### 2. 构造函数
+```python
+class MyString:
+    def __init__(self):      # __init__构造函数, 通过构造函数对类进行初始化操作
+        self.str = "MyString"
+
+    def output(self):
+        print(self.str)
+
+s = MyString()
+s.output()
+>
+MyString
+```
+> * 带参数的构造函数
+
+```python
+class UserInfo:
+    def __init__(self, name, pwd):
+        self.username = name
+        self._pwd = pwd
+
+    def output(self):
+        print("User: "+self.username+"\nPasswd:" +self._pwd)
+
+u = UserInfo("Rick", "123456")
+u.output()
+>
+User: Rick
+Passwd:123456
+```
+
+#### 3. 析构函数
+```python
+class MyString:
+    def __init__(self):  #构造函数
+        self.str = "MyString"
+    def __del__(self):   #析构函数
+        print("Bye")
+
+    def output(self):
+        print(self.str)
+
+s = MyString()
+
+s.output()
+del s   # 删除对象
+>
+MyString
+Bye
+```
+
+#### 4. 静态变量
+> 静态变量和静态方法是类的静态成员，他们与普通的成员变量和成员方法不同，静态类成员与具体的对象没有关系，而是只属于定义他们的类
+```python
+class Users(object):
+    online_count = 0   # 静态变量 记录当前用户数量
+    def __init__(self):  #构造函数, 创建对象时Users.online_count +1
+        Users.online_count += 1
+    def __del__(self):   #析构函数,释放对象时Users.online_count -1
+        Users.online_count -= 1
+
+a = Users()  #创建Users对象
+a.online_count += 1
+print(Users.online_count)
+>
+1
+```
+
+> * 静态方法
+> 静态方法只属于定义他的类，而不属于任何一个具体的对象
+> 特点
+> 1. 静态方法无需传入self参数，因此在静态方法中无法访问实例变量
+> 2. 静态方法不能直接访问类的静态变量，但可以通过类名引用静态变量
+
+```python
+class MyClass:
+    var1 = "String1"
+    @staticmethod   #静态方法
+    def staticmd():
+        print('I am static method')
+
+MyClass.staticmd()  #调用了静态方法
+c = MyClass()
+c.staticmd()
+>
+I am static method
+I am static method
+```
+
+> * 类方法
+> 特点
+> 1. 与静态方法一样，类方法可以使用类名调用类方法
+> 2. 与静态方法一样，类成员方法也无法访问实例变量，但可以访问类的静态变量
+> 3. 类方法需传入代表类的cls参数
+
+```python
+class MyClass:
+    val1 = "String1"  #静态变量
+    def __init__(self):
+        self.val2 = "Value 2"
+    @classmethod      #类方法
+    def classmd(cls):
+        print('Class: ' + str(cls) + ',val1: ' + cls.val1 + ', Cannot access value 2')
+
+MyClass.classmd()
+c = MyClass()
+c.classmd()
+> 
+Class: <class '__main__.MyClass'>,val1: String1, Cannot access value 2
+Class: <class '__main__.MyClass'>,val1: String1, Cannot access value 2
+```
+
+#### 5. instance() 函数判断对象类型
+> 使用instance()函数检测一个给定的对象是否属于（继承）某个类或类型，是为True，否为False
+```python
+class MyClass:
+    val1 = "String1"   #静态变量
+    def __init__(self):
+        self.val2 = "Value 2"
+
+c = MyClass()
+print(isinstance(c, MyClass))
+l = [1, 2, 3, 4]
+print(isinstance(l, list))
+> 
+True
+True
+```
+
+#### 6. 类的继承
+> 类可以继承其他类的内容，包括成员变量和成员函数
+```python
+import time
+
+class Users:
+    username = ""
+    def __init__(self, uname):      #构造函数
+        self.username = uname
+        print('(Construct fucntion:'+self.username+')')
+
+    def DisplayUsername(self):      #类Users的成员函数DisplayUsername
+        print(self.username)
+
+#继承类Users
+class UserLogin(Users):   #类Users的子类
+    def __init__(self, uname, LastLoginTime):
+        Users.__init__(self, uname)       #调用父类的Users的构造函数
+        self.LastLoginTime = LastLoginTime
+
+    def DisplayLoginTime(self):
+        print('Login time: '+self.LastLoginTime)
+
+#获取当前时间
+now = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+
+MyUser1 = UserLogin('Rick', now)
+MyUser2 = UserLogin('Leo', now)
+MyUser3 = UserLogin('Josh', now)
+
+MyUser1.DisplayUsername()   #访问类Users的函数
+MyUser1.DisplayLoginTime()     #访问子类的函数
+MyUser2.DisplayUsername()
+MyUser2.DisplayLoginTime()
+MyUser3.DisplayUsername()
+MyUser3.DisplayLoginTime()
+
+>
+(Construct fucntion:Rick)
+(Construct fucntion:Leo)
+(Construct fucntion:Josh)
+Rick
+Login time: 2016-09-10 16:20:45
+Leo
+Login time: 2016-09-10 16:20:45
+Josh
+Login time: 2016-09-10 16:20:45
+```
+#### 7. 多态
+> 抽象类中定义的一个方法，可以在其子类中重新实现，不同子类中实现的方法也不相同
+
+```python
+from abc import ABCMeta, abstractclassmethod
+
+class Shape(object):
+    __metaclass__ = ABCMeta
+    def __init__(self):
+        self.color = "Black"
+
+@abstractclassmethod
+def draw(self):
+    pass
+
+class circle(Shape):   #Shape子类circle
+    def __init__(self, x, y, r):
+        self.x = x
+        self.y = y
+        self.r = r
+
+    def draw(self):
+        print("Draw Circle: (%d, %d, %d)" %(self.x, self.y, self.r))
+
+class line(Shape):     #Shape 子类line
+    def __init__(self, x1, y1, x2, y2):
+        self.x1 = x1
+        self.y1 = y1
+        self.x2 = x2
+        self.y2 = y2
+
+    def draw(self):       #抽象方法draw()又不同的实现,这就是多态
+        print("Draw Line: (%d, %d, %d, %d)" %(self.x1, self.y1, self.x2, self.y2))
+
+c = circle(10, 10, 5)
+c.draw()
+
+l = line(10, 10, 20, 20)
+l.draw()
+
+>
+Draw Circle: (10, 10, 5)
+Draw Line: (10, 10, 20, 20)
+```
 
 
+### Python 模块
+
+#### sys
+```python
+import sys
+
+print(sys.platform) #获取当前操作系统平台
+
+#argv可获取命令行参数
+print(sys.argv[0])  #当前脚本的文件名
+
+sys.exit()   #退出应用程序
+
+sys.path   #系统路径
+
+>
+darwin
+/Users/xhxu/python/magedu/test.py
+```
