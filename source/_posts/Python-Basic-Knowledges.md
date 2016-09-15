@@ -689,3 +689,268 @@ sys.path   #系统路径
 darwin
 /Users/xhxu/python/magedu/test.py
 ```
+
+---
+#### platform
+
+```python
+
+import platform
+print(platform.platform()) #获取操作系统类型
+print(platform.system())   #获取平台系统信息
+print(platform.version())  #操作系统版本
+print(platform.machine())  #计算机类型
+print(platform.node())     #计算机网络名称
+print(platform.processor())#处理器信息
+print(platform.uname())    #综合信息
+print(platform.python_build())  #python 版本信息
+print(platform.python_version()) #Python主版本信息
+print(platform.python_compiler()) #Python编译器信息
+print(platform.python_branch())   #获取Python的分支情况
+>
+Darwin-15.5.0-x86_64-i386-64bit
+Darwin
+Darwin Kernel Version 15.5.0: Tue Apr 19 18:36:36 PDT 2016; root:xnu-3248.50.21~8/RELEASE_X86_64
+x86_64
+xhxu-mac
+i386
+uname_result(system='Darwin', node='xhxu-mac', release='15.5.0', version='Darwin Kernel Version 15.5.0: Tue Apr 19 18:36:36 PDT 2016; root:xnu-3248.50.21~8/RELEASE_X86_64', machine='x86_64', processor='i386')
+('v3.5.1:37a07cee5969', 'Dec  5 2015 21:12:44')
+3.5.1
+GCC 4.2.1 (Apple Inc. build 5666) (dot 3)
+v3.5.1
+```
+
+> * python 解释器有多种版本实现方式
+> 1. CPython	默认Python是实现方式。用C语言编写的，当执行代码的时候，Python代码会被转化成字节码，所有CPython是一个字节码解释器
+> 2. PyPy	Python写成的解释器，这个解释器代码先转化成c，然后再编译。比CPython性能要好，会把代码转化成机器码
+> 3. Jython	Java实现的一个解释器，可以把java模块加载在Python模块中使用
+> 4. IronPython C#语言实现，可以使用在.NET & Mono平台的解释器
+
+
+
+
+
+---
+#### math
+```python
+import math
+print(math.e)       #自然对数
+print(math.pi)      #pi的值
+
+print('math.ceil(3.4)= ', math.ceil(3.4))       #返回大于等于x的最小整数
+print('math.fabs(-3)= ', math.fabs(-3))         #返回x的绝对值
+print('math.floor(3.4)= ', math.floor(3.4))     #返回小于等于x的最大整数
+print('math.sqrt(4)= ', math.sqrt(4))           #返回x的平方根
+print('math.trunc(3.4)=', math.trunc(3.4))      #返回x的整数部分
+>
+2.718281828459045
+3.141592653589793
+math.ceil(3.4)=  4
+math.fabs(-3)=  3.0
+math.floor(3.4)=  3
+math.sqrt(4)=  2.0
+math.trunc(3.4)= 3
+```
+
+---
+#### random 
+```python
+import random
+print(random.randint(0, 99))        #随机0-100的整数
+print(random.randrange(0, 101, 2))  #随机0-100的偶数
+print(random.choice('jklhgy&#&*()%^@'))   #指定字符集随机取一个字符
+
+lst = [1, 2, 3, 4, 5]
+random.shuffle(lst)                 #将列表中元素打乱
+print(lst)
+
+
+lst1 = [1, 2, 3, 4, 5, 6]           
+print(random.sample(lst1, 3))       #取指定长度片段
+
+>
+30
+62
+@
+[4, 5, 2, 1, 3]
+[1, 2, 6]
+```
+
+
+---
+#### decimal
+```python
+from decimal import Decimal
+
+print(Decimal('1.0') / Decimal('3.0'))  #浮点计算
+
+
+from decimal import Decimal
+from decimal import getcontext    # getcontext() 获取当前环境
+getcontext().prec = 6
+print(Decimal('1.0') / Decimal('3.0'))  
+>
+0.3333333333333333333333333333
+0.333333
+```
+
+---
+#### fractions
+```python
+import fractions        #处理和表现分数
+# x = fractions.Fraction(分子, 分母)
+
+x = fractions.Fraction(1, 6)
+print(x)
+>
+1/6
+```
+
+---
+#### time
+
+> * Unix timestamp 是一种时间表示方式，是指定义为格林威治时间1970年01月01日00时00分00秒（北京时间1970年01月01日08时00分00秒）起至现在的总秒数。
+> * struct_time数组包含9个元素
+> 1. year,  4位
+> 2. month, 1-12
+> 3. day, 1-31
+> 4. hours, 0-23
+> 5. minutes, 0-59
+> 6. seconds, 0-59
+> 7. weekday, 0-6
+> 8. Julian day, 一年有几天, 1-366
+> 9. DST 是否为夏令时
+
+```python
+import time
+print(time.time())
+print(time.localtime(time.time()))  #转换成当前时区的struct_time
+>
+1473921640.010664
+time.struct_time(tm_year=2016, tm_mon=9, tm_mday=15, tm_hour=14, tm_min=40, tm_sec=40, tm_wday=3, tm_yday=259, tm_isdst=0)
+```
+
+> * time.strftime() 可以按照指定的格式输出struct_time时间
+> %y	两位数的年份表示(00-99)
+> %Y	四位数的年份表示（000-9999）
+> %m 	月份(01-12)
+> %d 	月内中的一天(0-31)
+> %H 	24小时制小时数(0-23)
+> %I 	12小时制小时数(01-12)
+> %M 	分钟数(00-59)
+> %S	秒(00-59)
+> %a	本地简化星期名称
+> %A	本地完整星期名称
+> %b	本地简化月份名称
+> %B	本地完整月份名称
+> %c 	本地相应的日期表示和时间表示
+> %j	年内的一天(001-366)
+> %p	本地A.M或P.M
+> %U 	一年中的星期数(00-53), 星期天为星期开始
+> %w	星期(0-6), 星期天为开始
+> %W	一年中星期数(00-53), 星期一为星期的开始
+> %x 	本地相应的日期表示
+> %X	本地相应的时间表示
+> %Z	当前时区的名称
+> %%	%号本身
+
+```python
+import time
+print(time.strftime('%Y-%m-%d', time.localtime(time.time())))
+>
+2016-09-15
+```
+
+```python
+import time
+print(time.ctime())     #返回当前时间的字符串
+>
+Thu Sep 15 14:51:38 2016
+```
+
+---
+#### 自定义模块
+> * 模块是一个.py 的文件，其中包含函数的定义
+> * import MODULE_NAME 方法，在同一目录下引用改模块
+
+```python
+# mymodule.py
+def PrintString(str):
+    print(str)
+
+def sum(num1, num2):
+    print(num1 + num2)
+
+# test.py
+import mymodule
+mymodule.PrintString("Hello World")
+mymodule.sum(1, 2)
+> 
+Hello World
+3
+```
+
+---
+### Chapter 6 函数式编程
+> * 函数式编程是一种基本风格，其将计算过程看做是数学函数，在代码中，函数的返回值只依赖传入函数的参数，因此使用相同的函数调用函数两次，会得到相同的结果
+> 
+> * 头等函数(First-class function) 
+> 因编程语言把函数视为头等函数，称其拥有头等函数。拥有头程函数的编程语言将函数作为其他函数的参数，也可以将函数作为其他函数的返回值。可以把函数赋值给变量或存储在元组，列表，字典，集合和对象的数据结构中。
+>
+> * 高阶函数(Higher-order function)
+> 其为头等函数的一种实践，将其他函数作为参数或返回结果的函数。
+> 
+> * 纯函数
+> 1. 纯函数与外界交换数据只有唯一的渠道 --- 参数和返回值
+> 2. 纯函数不操作全局变量，没有状态，无I/O操作，不改变传入的任何参数的值。
+> 3. 容易将纯函数移植到新的运行环境
+> 4. 具有透明性，对同一个输入的值，得到相同的输出值
+> 
+> * 递归
+> 递归就是函数里调用自身，使用时，一定要明确递归结束条件，称为递归出口
+
+---
+#### lambda 匿名函数
+> * 返回函数名 = lambda 参数列表 : 函数返回值表达式语句
+```
+sum = lambda x, y, z : x+y+z
+等同于
+def sum(x, y, z):
+    return x, y, z
+```
+
+> * 数组名 = [(lambda 表达式1)， (lambda 表达式2), ...]
+```python
+Arr = [(lambda x: x**2), (lambda x: x**3), (lambda x: x**4)]
+print(Arr[0](2), Arr[1](2), Arr[2](2))
+>>>
+4 8 16
+```
+
+
+```python
+def math(o):
+    if(o==1):
+        return lambda x, y: x+y
+    if(o==2):
+        return lambda x, y: x-y
+    if(o==3):
+        return lambda x, y: x*y
+    if(o==4):
+        return lambda x, y: x/y
+
+action = math(1)
+print('10+2=', action(10, 2))
+action = math(2)
+print('10-2=', action(10, 2))
+action = math(3)
+print('10*2=', action(10, 2))
+action = math(4)
+print('10/2=', action(10, 2))
+>>>
+10+2= 12
+10-2= 8
+10*2= 20
+10/2= 5.0
+```
