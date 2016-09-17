@@ -954,3 +954,385 @@ print('10/2=', action(10, 2))
 10*2= 20
 10/2= 5.0
 ```
+
+#### map() 函数
+> * 用于将制定序列中的所有元素作为参数调用制定函数，并将结果构成一个新的序列返回。
+> 结果序列 = map(映射函数， 序列1[, 序列2, ...])
+```python
+arr = map(lambda x: x**2, [2, 4, 6, 8, 10])
+for e in enumerate(arr):   #enumerate 会将返回的值中包含索引信息
+    print(e)
+> 
+(0, 4)
+(1, 16)
+(2, 36)
+(3, 64)
+(4, 100)
+```
+
+```python
+arr = map(lambda x, y: x+y, [1, 3, 5, 7, 9], [2, 4, 6, 8, 10])
+for e in enumerate(arr):
+    print(e)
+>
+(0, 3)
+(1, 7)
+(2, 11)
+(3, 15)
+(4, 19)
+```
+
+#### filter() 
+> * 对指定的序列执行过滤操作
+> filter(函数function, 序列sequence)
+
+```python
+def is_even(x):
+    return x % 2 == 0
+
+arr = filter(is_even, [1, 2, 3, 4, 5, 6, 7, 8, 9])
+for e in enumerate(arr):
+    print(e)
+> 
+(0, 2)
+(1, 4)
+(2, 6)
+(3, 8)
+```
+
+#### reduce()
+> * 用于将指定序列中的所有元素作为参数按照一定的规则调用指定函数
+> 计算结果 = reduce(映射序列，序列)
+
+```python
+from functools import reduce
+def myadd(x, y):
+    return x+y
+
+
+sum = reduce(myadd, (2, 4, 6, 8, 10))
+print(sum)
+
+sum1 = reduce(lambda x, y: x+y, (2, 4, 6, 8, 10))
+print(sum1)
+>>>
+30
+30
+```
+
+#### zip()
+> * 以一系列列表作为参数，将列表中对应的元素打包成一个元组，然后返回元组组成的列表
+```python
+#长度相等的列表
+a = [1, 2, 3]
+b = [4, 5, 6]
+
+zipped = zip(a, b)
+
+for i in zipped:
+    print(i)
+>>>
+(1, 4)
+(2, 5)
+(3, 6)
+```
+
+```python
+#长度不等的列表, 以最短的列表相同
+
+a = [1, 2, 3]
+b = [4, 5, 6, 7, 8, 9]
+
+zipped = zip(a, b)
+
+for i in zipped:
+    print(i)
+>>> 
+(1, 4)
+(2, 5)
+(3, 6)
+```
+
+
+```python
+a = [1, 2, 3]
+b = [4, 5, 6]
+
+zipped = zip(a, b)
+unzipped = zip(*zipped)  #加上*表示调用zip()函数,将打包结果解压
+for i in unzipped:
+    print(i)
+>>>
+(1, 2, 3)
+(4, 5, 6)
+```
+
+#### 普通以及函数式编程对比
+```python
+# 普通编程方式
+list = [2, -6, 11, -7, 8, 15, -14, -1, 10, -13, 18]
+sum = 0
+for i in range(len(list)):
+    if list[i] > 0:
+        sum += list[i]
+print(sum)
+
+#函数式编程方式
+from functools import reduce
+list1 = [2, -6, 11, -7, 8, 15, -14, -1, 10, -13, 18]
+sum1 = filter(lambda x: x>0, list1)
+s = reduce(lambda x, y: x+y, sum1)
+print(s)
+>>>
+64
+64
+```
+
+---
+#### 闭包 
+> * 闭包(closure) 指函数嵌套， 将函数内部的嵌套函数视为一个对象，可以将嵌套函数座位定义他的函数的返回结果
+```python
+def func_lib():
+    def add(x, y):
+        return x+y
+    return add     #返回函数对象
+
+fadd = func_lib()
+print(fadd(1, 2))
+>>>
+3
+```
+
+---
+#### 递归函数
+> * 指直接或间接调用函数本身的函数
+```python
+#阶乘计算
+def fact(n):
+    if n == 1:
+        return 1
+    return n * fact(n - 1)
+
+print(fact(5))
+>>>
+120
+```
+
+---
+#### 迭代器 
+> * 访问集合内元素的一种方式，从序列(列表，元组，字典，集合)的第一元素开始访问，直到所有元素都被访问一遍后结束。
+> 迭代器对象 = iter(序列对象)
+```python
+list = [111, 222, 333]
+it = iter(list)
+print(next(it))
+print(next(it))
+print(next(it))
+>>>
+111
+222
+333
+```
+
+#### enumerate()
+> * 将列表或元组生成一个有序号的序列
+list = [111, 222, 333]
+for i, v in enumerate(list):
+    print(i, v)
+>>>
+0 111
+1 222
+2 333
+```
+
+---
+#### 生成器(Generator)
+> * 生成器包含一个yield语句，执行到yield语句时函数返回
+> * 生成器函数可以记住上一次函数体的位置，对生成器函数的下一次调用跳转至改函数中间，而上次调用的所有局部变量都保持不变
+```python
+def addlist(alist):
+    for i in alist:
+        yield i + 1
+
+alist = [1, 2, 3, 4]
+for x in addlist(alist):
+    print(x)
+>>>
+2
+3
+4
+5
+```
+
+
+
+
+
+
+---
+### I/O 编程
+
+#### 输入数据
+> 用户输入数据 = input(提示字符串)
+```python
+name = input('Please input your name: ')
+print('###############')
+print('Hello', name)
+>>>
+Rick
+Hello Rick
+```
+
+---
+#### 输出数据
+> print(字符串常量或字符串变量)
+> print('...%s...' % (string))
+
+```python
+for i in range(5):
+    print(i)
+
+# end="" 不换行
+for i in range(5):
+    print(i, end='')
+>>>
+0
+1
+2
+3
+4
+01234
+```
+
+---
+#### 文件操作
+> * 打开文件 f = open(文件名， 访问模式，buffering)
+|模式参数| 含义| 
+|-|-|
+|r |只读方式打开|
+|w | 以写的方式打开，此时文件内容会被清空。文件不存在会创建新的文件|
+|a | 以追加的模式打开，从文件末尾开始，必要时创建新文件|
+|r+ | 以读写模式打开|
+|w+ | 以读写模式打开|
+|a+ | 以追加的读写模式打开|
+|rb | 以二进制读模式打开|
+|wb | 以二进制写模式打开|
+|ab | 以二进制追加模式打开|
+|rb+ | 以二进制读写模式打开|
+|wb+ | 以二进制读写模式打开|
+|ab+ | 以二进制读写模式打开|
+
+> * buffering = 0	不缓冲
+> * buffering = 1	缓冲一行数据
+> * buffering > 1	使用给定值作为缓冲区大小
+
+
+
+> * 关闭文件 f.close()
+
+
+--- 
+#### read() 方法
+> * str = f.read([b])
+
+```python
+f = open('test.txt')
+str = f.read()
+f.close()
+print(str)
+>>>
+Hello World
+```
+
+```python
+
+pen('test.txt')
+while True:
+    chunk = f.read(2)  #读取两个字节到chunk
+    if not chunk:
+        break
+    print(chunk)
+f.close()
+>>>
+He
+ll
+o 
+Wo
+rl
+d
+```
+
+
+---
+#### readlines() 方法
+> * list = f.readlines()  
+> 读取文件的所有行
+```python
+f = open('test.txt')
+list = f.readlines()
+f.close()
+print(list)
+>>>
+['Hello World']
+```
+
+
+---
+#### readline()
+> str = f.readline()
+> 一次性读取文件中的所有行，使用readline()方法可以逐行读取文件内容
+```python
+f = open('test.txt')
+while True:
+    chunk = f.readline()
+    if not chunk:
+        break
+    print(chunk)
+f.close()
+>>>
+Hello World
+```
+
+
+---
+#### in 关键字
+> for line in 文件对象:
+>     处理行数据line
+```python
+f = open('test.txt')
+for line in f:
+    print(line)
+f.close()
+>>>
+Hello World
+```
+
+
+---
+#### 写入文件
+> f.write(写入文件内容)
+```python
+fname = input('Please input filename: ')
+f = open(fname, 'w')
+content = input("input something: ")
+f.write(content)
+f.close()
+>>>
+Please input filename: test_file
+input something: Hello World
+```
+
+---
+#### 追加写入
+> * a 或a+参数调用open()方法
+```python
+fname = input('Please enter filename: ')
+f = open(fname, 'w')
+content = input("input something: ")
+f.write(content)
+f.close()
+f = open(fname, 'a')
+f.write("This is only for comments: ")
+f.close()
+```
+
