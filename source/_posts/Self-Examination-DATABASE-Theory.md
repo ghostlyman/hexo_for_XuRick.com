@@ -72,3 +72,43 @@ tags:
 > 4. 缓冲区管理器： 为应用程序开辟DB的系统缓冲区，负责将磁盘中读取的数据送到内存缓冲区。
 
 
+
+---
+> * ER模型的基本元素是： 实体，联系和属性
+
+> 实体(Entity) 是一个数据对象，指应用中可以区别的客观存在的事物
+> 实体机(Entity Set) 是一指同一类实体构成的集合。
+> 实体类型(Entity Type) 是对实体集中实体的定义。
+
+
+> 联系(Relationship) 表示一个或多个实体之间的关联关系。
+> 联系集(Relationship Set) 指同一类联系构成的集合。
+> 联系类型(Relationship Type) 是对联系集中联系的定义。
+
+> 属性
+> 简单属性(Simple Attribute): 简单属性是不可再分割的属性
+> 复合属性(Composite Attribute): 复合属性是可再分解为其他属性的属性(即属性可嵌套)
+
+
+> 单值属性(Single - Valued Attribute)
+> 多值属性(Multi-Valued Attribute)
+
+> 设计全局的ER模型
+> 1. 确定公共实体类型
+> 2. 合并局部ER模型
+> 3. 消除冲突
+
+
+
+---
+> * 关系模型
+> 
+> 关系中属性的个数称为元数(Arity)
+> 元组个数称为基数(Cardinality)
+
+> 候选键(Candidate Key) 不含有多余属性的超键称为候选键。
+> 主键(Primary Key) 用户选作元组标识的候选键称为主键。
+> 外键(Foreign Key) 如果模式R中的属性K是其他模式的主键，那么K在模式R中称为外键。
+
+
+
