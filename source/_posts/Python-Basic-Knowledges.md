@@ -886,10 +886,100 @@ def sum(num1, num2):
 import mymodule
 mymodule.PrintString("Hello World")
 mymodule.sum(1, 2)
-> 
+>>>
 Hello World
 3
 ```
+
+
+---
+#### os 模块
+> * python 的exec系统方法同Unix的exec系统调用是一致的，这些方法适用于子进程中调用外部程序的情况。
+> 
+> os.system("some_command with args")将命令以及参数传递给你的系统shell，这很好，因为你可以用这种方法同时运行多个命令并且可以设置管道以及输入输出重定向。比如：os.system("some_command < input_file | another_command > output_file")
+> 然而，虽然这很方便，但是你需要手动处理shell字符的转义，比如空格等。此外，这也只能让你运行简单的shell命令而且不能运行外部程序。
+> 
+> 
+> system 方法，会运行外部程序，返回外部程序结果。适用于外部程序没有输出结果的情况。
+```
+In [3]: import os
+
+In [4]: os.system('echo \"Hello World\"')
+Hello World
+Out[4]: 0
+
+
+
+In [8]: val = os.system('ls -la')
+total 184
+drwxr-xr-x  26 xhxu  FREEWHEELMEDIA\Domain Users   884 Sep 25 20:40 .
+drwxr-xr-x   7 xhxu  FREEWHEELMEDIA\Domain Users   238 Sep  6 20:54 ..
+-rw-r--r--@  1 xhxu  FREEWHEELMEDIA\Domain Users  6148 Sep 18 19:39 .DS_Store
+drwxr-xr-x  13 xhxu  FREEWHEELMEDIA\Domain Users   442 Sep 26 19:29 .git
+drwxr-xr-x   7 xhxu  FREEWHEELMEDIA\Domain Users   238 Sep 26 19:29 .idea
+-rw-r--r--   1 xhxu  FREEWHEELMEDIA\Domain Users     9 Jul  2 15:48 .python-version
+-rw-r--r--   1 xhxu  FREEWHEELMEDIA\Domain Users   199 Sep  8 17:56 1.py
+-rw-r--r--   1 xhxu  FREEWHEELMEDIA\Domain Users   936 Sep  8 17:55 1.svg
+
+In [10]: print(val)
+0					# 0表示运行正常, 如果是没有返回结果的命令，返回值为256
+
+```
+
+
+> popen方法， 当需要得到外部程序输出结果时使用。要得到命令的输出内容，需调用read()或readlines()
+> 使用stream = os.popen("some_command with args")也能做与os.system一样的事，与os.system不同的是os.popen会给你一个像文件的对象从而你可以使用它来访问哪个程序的标准输入、输出。而且popen还有三个变种都是在I/O处理上有轻微不同。假如你通过一个字符串传递所有东西，你的命令会传递给shell；如果你通过一个列表传递他们，你不用担心逃避任何事。
+> 
+```
+In [11]: os.popen('ls -l ')
+Out[11]: <os._wrap_close at 0x10978d828>
+
+In [13]: print(os.popen('ls -l').read())		#调用read()
+total 160
+-rw-r--r--   1 xhxu  FREEWHEELMEDIA\Domain Users   199 Sep  8 17:56 1.py
+-rw-r--r--   1 xhxu  FREEWHEELMEDIA\Domain Users   936 Sep  8 17:55 1.svg
+-rw-r--r--   1 xhxu  FREEWHEELMEDIA\Domain Users   331 Aug 12 16:47 Find_name_with-slice-feature.py
+-rw-r--r--   1 xhxu  FREEWHEELMEDIA\Domain Users   439 Jul 30 11:36 Happy_Number.py
+-rw-r--r--   1 xhxu  FREEWHEELMEDIA\Domain Users   231 Aug 15 17:44 Prime_num.py
+-rw-r--r--   1 xhxu  FREEWHEELMEDIA\Domain Users   218 Aug 18 21:04 Prime_num2.py
+
+
+
+n [14]: val = os.popen('ls -l').read()			#变量接收命令的返回值
+
+In [15]: if '1.py' in val:				#使用in来判断返回值是否含有此字符串
+   ....:     print('Exist')
+   ....: else:
+   ....:     print('No Exist')
+   ....:     
+Exist
+```
+
+
+---
+#### subprocess模块
+> 此模块用于取代os.system, os.popen 模块
+> mssh 实现并行ssh的一个工具
+```
+In [3]: from subprocess import call
+
+In [4]: call(['ls', '-l'])
+total 160
+-rw-r--r--   1 xhxu  FREEWHEELMEDIA\Domain Users   199 Sep  8 17:56 1.py
+-rw-r--r--   1 xhxu  FREEWHEELMEDIA\Domain Users   936 Sep  8 17:55 1.svg
+-rw-r--r--   1 xhxu  FREEWHEELMEDIA\Domain Users   331 Aug 12 16:47 Find_name_with-slice-feature.py
+-rw-r--r--   1 xhxu  FREEWHEELMEDIA\Domain Users   439 Jul 30 11:36 Happy_Number.py
+-rw-r--r--   1 xhxu  FREEWHEELMEDIA\Domain Users   231 Aug 15 17:44 Prime_num.py
+-rw-r--r--   1 xhxu  FREEWHEELMEDIA\Domain Users   218 Aug 18 21:04 Prime_num2.py
+```
+
+
+
+
+
+
+
+
 
 ---
 ### Chapter 6 函数式编程
