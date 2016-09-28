@@ -4,6 +4,10 @@ date: 2016-08-30 14:54:59
 tags:
 ---
 
+Reference to:
+[saltycrane](http://www.saltycrane.com/blog/2009/05/converting-time-zones-datetime-objects-python/)
+[peiqian.net](http://peiqiang.net/2014/08/15/python-time-and-datetime.html)
+
 ## Python 概述
 
 ## Python 语言基础
@@ -822,6 +826,8 @@ print(x)
 > 8. Julian day, 一年有几天, 1-366
 > 9. DST 是否为夏令时
 
+
+
 ```python
 import time
 print(time.time())
@@ -831,7 +837,9 @@ print(time.localtime(time.time()))  #转换成当前时区的struct_time
 time.struct_time(tm_year=2016, tm_mon=9, tm_mday=15, tm_hour=14, tm_min=40, tm_sec=40, tm_wday=3, tm_yday=259, tm_isdst=0)
 ```
 
-> * time.strftime() 可以按照指定的格式输出struct_time时间
+
+
+> * time.strftime(format[, t]) 可以按照指定的格式输出struct_time时间
 > %y	两位数的年份表示(00-99)
 > %Y	四位数的年份表示（000-9999）
 > %m 	月份(01-12)
@@ -855,6 +863,8 @@ time.struct_time(tm_year=2016, tm_mon=9, tm_mday=15, tm_hour=14, tm_min=40, tm_s
 > %Z	当前时区的名称
 > %%	%号本身
 
+
+
 ```python
 import time
 print(time.strftime('%Y-%m-%d', time.localtime(time.time())))
@@ -868,6 +878,346 @@ print(time.ctime())     #返回当前时间的字符串
 >
 Thu Sep 15 14:51:38 2016
 ```
+
+
+```python
+#获取当前时间
+In [1]: import time
+
+In [2]: time.time()
+Out[2]: 1475033600.054703
+
+#将时间戳转换为时间元组
+In [3]: time.localtime(time.time())
+Out[3]: time.struct_time(tm_year=2016, tm_mon=9, tm_mday=28, tm_hour=11, tm_min=33, tm_sec=26, tm_wda
+
+#格式化输出当前时间
+In [4]: time.strftime('%Y-%m-%d %H:%M:%S')
+Out[4]: '2016-09-28 11:34:29'
+```
+
+```python
+#获取时间差
+In [10]: import time
+
+In [11]: def t():
+   ....:     start = time.time()
+   ....:     time.sleep(10)
+   ....:     end = time.time()
+   ....:     print(end-start)
+   ....:     
+
+In [12]: t()
+10.004667043685913
+```
+
+
+> * time.clock()
+> 这个需要注意，在不同的系统上含义不同。在UNIX系统上，它返回的是“进程时间”，它是用秒表示的浮点数（时间 戳）。而在WINDOWS中，第一次调用，返回的是进程运行的实际时间。而第二次之后的调用是自第一次调用以后到现在的运行时间。（实际上是以WIN32 上QueryPerformanceCounter()为基础，它比毫秒表示更为精确）
+
+
+```python
+import time
+
+if __name__ == '__main__':
+    time.sleep(1)
+    print('Clock 1:%s ' % time.clock())
+    time.sleep(1)
+    print('Clock 2:%s ' % time.clock())
+    time.sleep(1)
+    print('Clock 3:%s ' % time.clock())
+>>>
+Clock 1:0.028168 
+Clock 2:0.028281 
+Clock 3:0.028409 
+```
+
+
+> * time.sleep(seconds)
+> 延迟时间运行
+```python
+In [27]: while True:
+   ....:     time.sleep(3)
+   ....:     print(time.strftime('%H:%M:%S'))
+   ....:     
+
+11:58:02
+
+11:58:05
+
+11:58:08
+11:58:11
+```
+
+
+
+> * time.mktime(t)
+```python
+# 将一个struct_time转换为时间戳,如下time.localtime接收一个时间戳返回一个struct_time，而time.mktime接收一个struct_time，返回一个时间戳
+
+In [1]: import time
+
+In [2]: time.localtime(1407945600.0)
+Out[2]: time.struct_time(tm_year=2014, tm_mon=8, tm_mday=14, tm_hour=0, tm_min=0, tm_sec=0, tm_wday=
+
+In [3]: time.mktime(time.localtime(1607945600.0))
+Out[3]: 1607945600.0
+
+```
+
+
+---
+### datetime
+
+```python
+In [5]: import datetime
+
+In [6]: t = time.time()
+
+获取当前时间
+In [8]: datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+Out[8]: '2016-09-28 11:36:53'
+
+In [9]: datetime.datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+Out[9]: '2016-09-28 11:37:02'
+```
+
+
+```python
+#获取时间差
+In [13]: import datetime
+
+In [14]: starttime = datetime.datetime.now()
+
+In [15]: endtime = datetime.datetime.now()
+
+In [22]: print(endtime.second - starttime.second)
+19
+
+```
+
+```python
+#时间元组struct_time 转化为时间戳
+In [23]: import datetime
+
+In [24]: datetime.datetime.now()
+Out[24]: datetime.datetime(2016, 9, 28, 11, 51, 21, 305523)
+
+In [25]: datetime.datetime.now().timetuple()
+Out[25]: time.struct_time(tm_year=2016, tm_mon=9, tm_mday=28, tm_hour=11, tm_min=51, tm_sec=37, tm_w
+
+In [26]: time.mktime(datetime.datetime.now().timetuple())
+Out[26]: 1475034719.0
+
+```
+
+
+
+
+> *  datetime.date: 是指年月日构成的日期(相当于日历)
+```python
+
+In [4]: import datetime
+
+In [5]: today = datetime.date.today()
+
+In [6]: today
+Out[6]: datetime.date(2016, 9, 28)
+
+# 格式化需要的时间
+In [7]: today.strftime('%Y-%m-%d %H:%M:%S')
+Out[7]: '2016-09-28 00:00:00'
+
+#转换成struct_time格式，传递给time.mktime(t), 转换成时间戳格式
+In [9]: today.timetuple()
+Out[9]: time.struct_time(tm_year=2016, tm_mon=9, tm_mday=28, tm_hour=0, tm_min=0, tm_sec=0, tm_wday=
+
+
+In [11]: time.mktime(today.timetuple())
+Out[11]: 1474992000.0
+
+#replace  替换date对象
+In [12]: today.replace(year=2014)
+Out[12]: datetime.date(2014, 9, 28)
+
+# 将时间戳转化为date对象
+In [13]: datetime.date.fromtimestamp(1608058729)
+Out[13]: datetime.date(2020, 12, 16)
+
+```
+
+
+> *  datetime.time: 是指时分秒微秒构成的一天24小时中的具体时间(相当于手表)
+
+```python
+
+In [19]: t = datetime.time(16, 9, 28)
+
+In [20]: t
+Out[20]: datetime.time(16, 9, 28)
+
+In [21]: t.strftime('%Y-%m-%d %H:%M:%S')
+Out[21]: '1900-01-01 16:09:28'
+
+#datetime.time.replace([hour[, minute[, second[, microsecond[, tzinfo]]]]]) 返回一个替换后的time对象
+In [22]: t.replace(hour=9)
+Out[22]: datetime.time(9, 9, 28)
+
+In [23]: datetime.time(9, 45, 20)
+Out[23]: datetime.time(9, 45, 20)
+```
+
+
+> *  datetime.datetime: 上面两个合在一起，既包含时间又包含日期
+```python
+
+In [24]: d1 = datetime.datetime.today()
+
+In [25]: d1
+Out[25]: datetime.datetime(2016, 9, 28, 12, 16, 4, 629514)
+
+In [26]: d2 = datetime.datetime(2015, 5, 25, 11, 11, 11, 790945)
+
+In [27]: d2
+Out[27]: datetime.datetime(2015, 5, 25, 11, 11, 11, 790945)
+
+
+# datetime.datetime.now([timezone])
+In [28]: datetime.datetime.now()
+Out[28]: datetime.datetime(2016, 9, 28, 12, 17, 22, 551326)
+```
+
+```python
+#获取不同时区
+In [63]: from pytz import all_timezones
+
+In [64]: for zone in all_timezones:
+   ....:     if 'Asia' in zone:
+   ....:         print(zone)
+   ....:         
+Asia/Aden
+Asia/Almaty
+Asia/Amman
+Asia/Anadyr
+Asia/Aqtau
+Asia/Aqtobe
+Asia/Ashgabat
+Asia/Ashkhabad
+Asia/Baghdad
+Asia/Bahrain
+Asia/Baku
+Asia/Bangkok
+Asia/Barnaul
+Asia/Beirut
+Asia/Bishkek
+Asia/Brunei
+Asia/Calcutta
+Asia/Chita
+Asia/Choibalsan
+Asia/Chongqing
+Asia/Chungking
+Asia/Colombo
+Asia/Dacca
+Asia/Damascus
+Asia/Dhaka
+Asia/Dili
+Asia/Dubai
+Asia/Dushanbe
+Asia/Gaza
+Asia/Harbin
+Asia/Hebron
+Asia/Ho_Chi_Minh
+Asia/Hong_Kong
+Asia/Hovd
+Asia/Irkutsk
+Asia/Istanbul
+Asia/Jakarta
+Asia/Jayapura
+Asia/Jerusalem
+Asia/Kabul
+Asia/Kamchatka
+Asia/Karachi
+Asia/Kashgar
+Asia/Kathmandu
+Asia/Katmandu
+Asia/Khandyga
+Asia/Kolkata
+Asia/Krasnoyarsk
+Asia/Kuala_Lumpur
+Asia/Kuching
+Asia/Kuwait
+Asia/Macao
+Asia/Macau
+Asia/Magadan
+Asia/Makassar
+Asia/Manila
+Asia/Muscat
+Asia/Nicosia
+Asia/Novokuznetsk
+Asia/Novosibirsk
+Asia/Omsk
+Asia/Oral
+Asia/Phnom_Penh
+Asia/Pontianak
+Asia/Pyongyang
+Asia/Qatar
+Asia/Qyzylorda
+Asia/Rangoon
+Asia/Riyadh
+Asia/Saigon
+Asia/Sakhalin
+Asia/Samarkand
+Asia/Seoul
+Asia/Shanghai
+Asia/Singapore
+Asia/Srednekolymsk
+Asia/Taipei
+Asia/Tashkent
+Asia/Tbilisi
+Asia/Tehran
+Asia/Tel_Aviv
+Asia/Thimbu
+Asia/Thimphu
+Asia/Tokyo
+Asia/Tomsk
+Asia/Ujung_Pandang
+Asia/Ulaanbaatar
+Asia/Ulan_Bator
+Asia/Urumqi
+Asia/Ust-Nera
+Asia/Vientiane
+Asia/Vladivostok
+Asia/Yakutsk
+Asia/Yekaterinburg
+Asia/Yerevan
+
+
+
+#获得东京时间
+In [66]: datetime.now(timezone('Asia/Tokyo'))
+Out[66]: datetime.datetime(2016, 9, 28, 14, 28, 0, 738564, tzinfo=<DstTzInfo 'Asia/Tokyo' JST+9:00:0
+
+```
+
+
+
+> *  datetime.timedelta: 时间间隔对象(timedelta)。一个时间点(datetime)加上一个时间间隔(timedelta)可以得到一个新的时间点(datetime)。比如今天的上午3点加上5个小时得到今天的上午8点。同理，两个时间点相减会得到一个时间间隔。
+
+```python
+
+In [67]: import datetime
+
+In [68]: today = datetime.datetime.today()
+
+In [69]: yesterday = today - datetime.timedelta(days=1)
+
+In [70]: yesterday
+Out[70]: datetime.datetime(2016, 9, 27, 13, 29, 59, 72827)
+
+In [71]: today
+Out[71]: datetime.datetime(2016, 9, 28, 13, 29, 59, 72827)
+```
+
 
 ---
 #### 自定义模块
