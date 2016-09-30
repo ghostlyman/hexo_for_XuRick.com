@@ -1778,3 +1778,275 @@ f.write("This is only for comments: ")
 f.close()
 ```
 
+---
+#### writelines() 方法: 向文件中写入字符串序列
+> f.writelines(seq)
+```python
+menulist = ['a', 'b', 'c', 'd']
+
+fname = input("Please input name: ")
+
+f = open(fname, 'w')
+
+f.writelines(menulist)
+f.close()
+```
+
+
+
+
+--- 
+#### 文件指针
+> 指向文件的指针变量，用于标识当前读写文件的位置。
+> * tell() 方法获取文件指针位置
+> 
+```python
+f = open('test.txt', 'w')
+
+print(f.tell())
+f.write('hello')
+print(f.tell())
+f.write('python')
+print(f.tell())
+f.close()       #关闭文件,将重新测试读取文件的指针位置
+>>>
+0
+5	#因为加入了一个长度为5的字符串
+11
+```
+
+> * 移动文件指针
+> 
+> seek() 方法手动移动文件指针位置
+> 文件对象.seek((offset, where))
+> offset: 移动偏移量，单位为字节。
+> where: 指定何处开始移动
+```python
+f = open('test.txt', 'w+')
+print(f.tell())
+f.write('Hello')
+print(f.tell())
+f.seek(0, 0)    #指定文件指针开始位置
+print(f.tell())
+str = f.readline()
+print(str)
+f.close()
+>>>
+0
+5
+0
+Hello
+```
+
+
+---
+#### 截断文件
+> 文件对象.truncate([size])
+> size指定截取文件大小，单位为字节。
+```python
+f = open('test.txt', 'w')
+f.write('Hello World')
+f.truncate(5)
+>>>
+Hello		#test.txt文件内容只有Hello
+```
+
+
+---
+#### 文件属性
+> os 模块中的stat() 函数，可以获取文件时间属性
+> 文件属性元组 = os.stat(文件路径)
+```python
+import os
+filestatus = os.stat('test.txt')
+print(filestatus)
+>>>
+os.stat_result(st_mode=33188, st_ino=8204874, st_dev=16777220, st_nlink=1, st_uid=1204811411, st_gid=254449427, st_size=5, st_atime=1475221440, st_mtime=1475221438, st_ctime=1475221438)
+```
+
+> * stat模块中的文件属性元组索引对应的常用常量
+
+|索引|常量|
+|-|-|
+|0|stat.ST_MODE|
+|6|stat.ST_SIZE|
+|7|stat.ST_MTIME|
+|8|stat.ST_ATIME|
+|9|stat.ST_CTIME|
+
+```python
+import os, stat, time
+filestatus = os.stat('test.txt')
+print(filestatus[stat.ST_SIZE])
+print(filestatus[stat.ST_MTIME])
+print(filestatus[stat.ST_ATIME])
+print(time.ctime(filestatus[stat.ST_CTIME]))
+>>>
+5
+1475221438
+1475221440
+Fri Sep 30 15:43:58 2016
+```
+
+
+> * 复制文件  copy()
+> copy(src, dst)
+```python
+import shutil
+shutil.copy('/Users/xhxu/python/liaoxuefeng/test.txt', '/Users/xhxu/python/liaoxuefeng/test')
+```
+
+> * 移动文件
+```python
+import shutil
+shutil.move('/Users/xhxu/python/liaoxuefeng/test.txt', '/Users/xhxu/python/liaoxuefeng/test')
+```
+
+> * 删除文件
+```python
+import os
+os.move('/Users/xhxu/python/liaoxuefeng/test.txt')
+```
+
+> * 重命名
+```python
+import os
+os.rename('/Users/xhxu/python/liaoxuefeng/test.txt', '/Users/xhxu/python/liaoxuefeng/test1.txt')
+```
+
+> * 获取当期目录
+```python
+import os
+print(os.getcwd())
+>>>
+/Users/xhxu/python/liaoxuefeng
+```
+
+> * 获取目录内容
+```python
+import os
+print(os.listdir('/Users/xhxu/python/liaoxuefeng'))
+>>>
+['.idea', '.python-version', '__pycache__', 'call_func.py', 'Decoration', 'do_iter.py', 'do_slice.py', 'foo.txt', 'func.py', 'Gdoc', 'hello world', 'hex.py', 'kw_args.py', 'login.py', 'Machine Learning', 'move.py', 'phone', 'practice', 'quadratic.py', 'recur.py', 'speedtest', 'support.py', 'test', 'test.py', 'test1.py', 'test1.txt', 'var_args.py']
+```
+
+> * 创建目录
+```python
+import os
+print(os.mkdir('/Users/xhxu/python/liaoxuefeng/test1'))
+```
+
+> * 删除目录
+```python
+import os
+print(os.rmdir('/Users/xhxu/python/liaoxuefeng/test1'))
+```
+
+
+
+---
+### 图形化编程
+> * python 提供了一些图形化模块，Tkinter, wxWidgets, easygui, wxpython
+
+#### Tkinter 模块使用
+```
+In [2]: from tkinter.messagebox import *
+In [4]: showinfo(title='test', message='welcome')
+Out[4]: 'ok'
+
+In [5]: showwarning(title='test', message='warning')
+Out[5]: 'ok'
+
+In [6]: showerror(title='test', message='Error')
+Out[6]: 'ok'
+
+```
+
+
+
+--- 
+### 多进程编程
+> * 进程是正在运行的程序实例。
+> * 每个进程至少包含一个线程，从主程序开始执行，直到退出程序；主线程结束，该进程也被从内存中卸载掉。
+>
+> * 进程一般如下组成
+> 1. 与程序相关联的可执行代码的映像
+> 2. 内存空间(通常是虚拟内存中的一些区域)， 其中保存可执行代码，进程的特定数据，用于记录活动例程和其他时间的调用栈(stack)，用于保存实时产生的中间结果的堆(heap)
+> 3. 分配给进程的资源的操作系统描述符(比如文件句柄)以及其他数据资源
+> 4. 安全属性，进程的所有者和权限
+> 5. 处理器状态，寄存器的内容，物理内存地址等
+> 
+> * 操作系统在进程控制块(Process control block, PCB)的数据结构中保存活动进程的上述信息。
+
+
+
+---
+#### 进程编程
+```
+In [10]: import subprocess
+In [11]: retcode = subprocess.call('/Applications/ShadowsocksX.app/Contents/MacOS/ShadowsocksX')	#调用可执行程序
+[VERBOSE] GCDWebServer started on port 8090
+[VERBOSE] Registered Bonjour service "webserver" with type '_http._tcp.' on port 8090
+2016-09-30 16:37:05.757 ShadowsocksX[98086:7948318] Connecting accounts.google.com
+2016-09-30 16:37:06.590 ShadowsocksX[98086:7948318] Connecting apis.google.com
+2016-09-30 16:37:08.101 ShadowsocksX[98086:7948318] Connecting ssl.gstatic.com
+2016-09-30 16:37:09.322 ShadowsocksX[98086:7948318] Connecting mail.google.com
+2016-09-30 16:37:09.339 ShadowsocksX[98086:7948318] Connecting mail.google.com
+2016-09-30 16:37:10.683 ShadowsocksX[98086:7948318] Connecting drive.google.com
+```
+
+
+> * subprocess.Popen() 函数
+> 进程对象 = subprocess.Popen(args, bufsize=0, executable=None, stdin=None, stdout=None, stderr=None, preexec_fn=None, close_fds=False, shell=False, cwd=None, env=None, universal_newlines=False, startupinfo=None, creationflags=0)
+> args, 可以是字符串或者序列类型(list, tuple), 用于指定进程可执行文件及其参数
+> executable, 指定可执行程序。一般通过args指定所要运行的程序。如果将参数shell为True，则指定为shell。windows下，默认shell由COMSPEC环境变量来指定
+> stdin, 默认为键盘
+> stdout, 默认为屏幕
+> stderr, 默认为屏幕
+> preexec_fn, 只在Unix有效，用于指定一个可执行对象，将在子进程运行前被调用
+> close_fds, windows下，若为True，新创建的子进程将不会继承父进程的输入，输出和错误管道。
+> cwd, 指定进程的当前目录
+> universal_newlines, 指定是否使用统一的文本换行符，在不同的操作系统下，文本的换行符不一样。windows为/r/n, Linux是/n
+> startupinfo, windows下有效
+> creationflags, windows 下有效
+
+```
+In [14]: import subprocess
+
+In [15]: p = subprocess.Popen('ls', shell=True)		#执行ls命令
+
+In [16]: Decoration		do_slice.py		login.py		speedtest		test1.txt
+Gdoc			foo.txt			move.py			support.py		var_args.py
+Machine Learning	func.py			phone			test
+__pycache__		hello world		practice		test.py
+call_func.py		hex.py			quadratic.py		test1
+do_iter.py		kw_args.py		recur.py		test1.py
+
+
+In [16]: p.wait()
+Out[16]: 0
+```
+
+
+```python
+import subprocess
+import datetime
+
+print(datetime.datetime.now())
+p = subprocess.Popen('ping xurick.com ', shell=True)
+print('processing')
+p.wait()
+print(datetime.datetime.now())
+>>>
+2016-09-30 16:55:59.156533
+processing
+PING xurick.com (192.30.252.153): 56 data bytes
+64 bytes from 192.30.252.153: icmp_seq=0 ttl=48 time=556.738 ms
+64 bytes from 192.30.252.153: icmp_seq=1 ttl=48 time=782.376 ms
+64 bytes from 192.30.252.153: icmp_seq=2 ttl=48 time=700.090 ms
+64 bytes from 192.30.252.153: icmp_seq=3 ttl=48 time=479.052 ms
+64 bytes from 192.30.252.153: icmp_seq=4 ttl=48 time=669.792 ms
+64 bytes from 192.30.252.153: icmp_seq=5 ttl=48 time=611.724 ms
+```
+
+
