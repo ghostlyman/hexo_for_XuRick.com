@@ -733,3 +733,116 @@ Out[115]: [1, 4, 9, 16]
 ```
 
 
+---
+## 文件处理
+
+> * open()
+> 
+> * close()
+> 始终确保你显式关闭每个打开的文件，一旦它的工作完成你没有任何理由保持打开文件。因为程序能打开的文件数量是有上限的。如果你超出了这个限制，没有任何可靠的方法恢复，因此程序可能会崩溃。
+
+> read() 方法一次性读取整个文件
+```python
+f = open('/Users/xhxu/python/liaoxuefeng/test.txt')
+a = f.read()
+print(a)
+>>>
+Hello
+```
+
+> * readline() 能帮助你每次读取文件的一行。
+> * readlines() 方法读取所有行到一个列表中。
+```python
+f = open('/Users/xhxu/python/liaoxuefeng/test.txt')
+a = f.readlines()
+print(a)
+>>>
+['Hello\n', 'World']
+```
+
+
+> * copy文本到指定的一个文本文件
+```python
+#!/bin/env python
+
+import sys
+
+if len(sys.argv) < 3:
+   print("Wrong parameters")
+   print('./copyfile.py file1 file2')
+   sys.exit(1)
+
+f1 = open(sys.argv[1])
+s = f1.read()
+f1.close()
+f2 = open(sys.argv[2], 'w')
+f2.write(s)
+f2.close()
+>>>
+python copyfile.py test.txt test1.txt
+$ cat test1.txt
+$ Hello
+```
+
+
+> * 文本文件相关信息统计
+```python
+import os
+import sys
+
+def parse_file(path):
+    """
+       分析给定文本文件，返回其空格、制表符、行的相关信息
+
+       :arg path: 要分析的文本文件的路径
+
+       :return: 包含空格数、制表符数、行数的元组
+    """
+    fd = open(path)
+    i = 0
+    space = 0
+    tabs = 0
+    for i, line in enumerate(fd):
+        space += line.count(' ')
+        tabs += line.count('\t')
+    fd.close()
+    # 以元组的形式返回结果
+    return space, tabs, i+1
+
+def main(path):
+    """
+    函数用于打印文件分析结果
+
+    :arg path: 要分析的文本文件的路径
+    :return: 若文件存在则为 True，否则 False
+    """
+    if os.path.exists(path):
+        spaces, tabs, lines = parse_file(path)
+        print("Space {}, tabs {}, lines {}".format(spaces, tabs, lines))
+        return True
+    else:
+        return False
+
+if __name__ == '__main__':
+    if len(sys.argv) > 1:
+        main(sys.argv[1])
+    else:
+        sys.exit(-1)
+    sys.exit(0)
+>>>
+python parsefile.py test.txt
+Space 0, tabs 0, lines 2
+```
+
+
+> * with 语句
+> with 语句处理文件对象，它会文件用完后会自动关闭，就算发生异常也没关系
+```
+In [1]: with open('test.txt') as f:
+   ...:     for i in f:
+   ...:         print(i, end='')
+   ...:         
+Hello
+World
+```
+

@@ -2050,3 +2050,140 @@ PING xurick.com (192.30.252.153): 56 data bytes
 ```
 
 
+> * CreateProcess 函数
+> CreateProcess(appName, commandLine, processAttribute, TreadAttributes, bInheritHandles, dwCreationFlags, newEnvironment, currentDirectory, startupinfo)
+> appName: 执行的程序名，包括路径和文件名，通常可以为Null
+> processAttribute: 新进程的安全属性，如果为None，默认为安全属性
+> ThreadAttribute: 线程安全属性，None表示默认安全属性
+> bInheritHandles: 继承属性，None为默认继承属性
+> dwCreationFlags: 指定附加，用来控制优先类和进程创建的标志。
+> newEnvironment: 进程环境模块。Null为调用CreateProcess() 函数的进程环境
+> startupinfo: 指定新进程的主窗口特性。
+
+
+> * ctype库赋予了Python类似于C语言一样底层的操作能力。
+```python
+from ctypes.wintypes import * 
+from ctypes import *
+```
+
+
+```python
+#利用进程快照枚举当前Windows运行进程信息
+from ctypes.wintypes import *
+from ctypes import *
+
+
+kernel32 = windll.kernel32
+# 定义进程信息结构体
+class tagPROCESSENTRY32(Structure):
+    _fields = [('dwSize',           DWORD),
+               ('cntUsage',         DWORD),
+               ('th32ProcessID',    POINTER(ULONG)),
+               ('th32ModuleID',     DWORD),
+               ('cntThreads',       DWORD),
+               ('th32ParentProcessID', DWORD),
+               ('pcPriClassBase',   LONG),
+               ('dwFlags',          DWORD),
+               ('szExeFile',        c_char * 260)]
+
+# 获取当前系统运行进程的快照
+hSnapshot = kernel32.CreateToolhelp32Snapshot(15, 0)
+fProcessEntry32 = tagPROCESSENTRY32()
+# 初始化进程信息结构体的大小
+fProcessEntry32.dwSize = sizeof(fProcessEntry32)
+
+#获取第一个进程信息
+listloop = kernel32.Process32First(hSnapshot, byref(fProcessEntry32))
+while listloop: #若获取进程信息,则继续
+    processName = (fProcessEntry32.szExeFile)
+    processID = fProcessEntry32.th32ProcessID
+    print('%d:%s' % (processID,processName))
+    # 获取下一个进程信息
+    listloop = kernel32.Process32Next(hSnapshot, byref(fProcessEntry32))
+```
+
+
+
+> * 终止进程
+> 进程终止之后，会执行下面的操作
+> 1. 进程中的所有线程都被标记为"终止"状态
+> 2. 分配给进程的所有资源都会被释放掉
+> 3. 所有与该进程相关的内核对象都会被关闭
+> 4. 从内存中移除该进程的代码
+> 5. 系统设置进程的退出代码
+> 6. 将该进程对象设置为"受信"(Sigaled)状态
+> 
+> TASKKILL [/S system [/U username [/P [password]]]]
+> 	{[/FI filter] [/PID processid] | [/IM imagename]} [/T] [/F]
+> /S system	指定要连接的远程系统
+> /U [domain\user] 	指定应该在哪个用户上下执行命令
+> /P [password] 	为提供的用户上下文指定密码
+> /FI filter		应用筛选器以选择一组任务。允许使用'*', 例如映像名称 eq acme*
+> /PID	processid	指定要终止的进程PID
+> /IM  imagename	指定要终止的进程映像名称，通配符'*' 可以用来指定所有任务或映像名称
+> /T			指定的进程由它启用子进程
+> /F 			强制终止进程
+
+
+
+
+
+
+> * 进程池
+> 进程池是管理进程的一种机制。程序同时运行多个进程时，可以使用进程池对进程进行管理和调度。
+> 
+> * multiprocessing包是Python中多进程管理包
+> from multiprocessing import pool
+> 进程池对象 = Pool(processes=n)
+> 
+> multiprocessing.Pool.apply_async(func[, args[, kwargs[, callback]]])
+> func:	异步地执行函数名
+> args 和 kwargs: func() 函数的参数
+> callback: 可调用对象，接收输入参数。当func的结果变为可用时，将立即传递给callback
+> 
+> * 关闭进程池
+> close() 函数会等进程池中的工作进程执行结束再关闭进程池
+> terminate() 函数会直接关闭
+> join() 函数可以等待进程池中的工作进程执行完毕，以防止主进程在工作进程结束前结束.
+```
+#进程池例子
+```python
+from multiprocessing import Pool
+from time import sleep
+import subprocess
+
+def f(x):
+    retcode = subprocess.call('/Applications/ShadowsocksX.app/Contents/MacOS/ShadowsocksX')
+    sleep(1)
+
+def main():
+    pool = Pool(processes=3)    #最多工作进程数为3
+    for i in range(1, 10):
+        result = pool.apply_async(f, (i, ))
+    pool.close()
+    pool.join()
+    if result.successful():
+        print('Successful')
+
+
+if __name__ == '__main__':
+    main()
+# 内建变量__name__通常为模块文件名。如果直接运行标准程序,则__name__的值等于'__main__'。本例中,只有__name__ == '__main__'时,
+#  才会运行main()函数创建和使用进程池。而运行进程池中的工作进程时,则不会运行main() 函数
+>>>
+bind: Address already in use
+2016-10-01 16:40:57.857 ShadowsocksX[2143:8138105] Could not bind
+bind: Address already in use
+2016-10-01 16:40:57.857 ShadowsocksX[2144:8138066] Could not bind
+bind: Address already in use
+2016-10-01 16:40:57.857 ShadowsocksX[2142:8138069] Could not bind
+```
+
+
+---
+#### 多线程编程
+
+
+
+ 
