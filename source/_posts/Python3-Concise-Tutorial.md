@@ -846,3 +846,70 @@ Hello
 World
 ```
 
+
+--- 
+## 异常
+
+> * 使用 try...except 来处理任意异常
+```
+try:
+    statements to be inside try clause	#先执行 try 子句 （在 try 和 except 关键字之间的部分）
+    statement2				#如果在 try 子句执行过程中发生了异常，那么该子句其余的部分就会被忽略。
+    statement3
+    ...
+except ExceptionName:			#没有异常发生，except 子句 在 try 语句执行完毕后就被忽略了
+    statements to evaluated in case of ExceptionName happens	#如果发生了一个异常，在 except 子句中没有与之匹配的分支，它就会传递到上一级 try 语句中
+```
+
+
+```python
+def get_number():
+    number = float(input("Enter a float number: "))
+    return number
+
+while True:
+    try:
+        print(get_number())
+    except ValueError:
+        print("You entered a wrong value.")
+>>>
+Enter a float number: 45.4
+45.4
+Enter a float number: 3
+3.0
+Enter a float number: a
+You entered a wrong value.
+Enter a float number: 24,0
+You entered a wrong value.
+```
+
+> * 捕获异常
+```
+In [1]: try:
+   ...:     raise ValueError("A value error happened.")
+   ...: except ValueError:
+   ...:     print("ValueError in our code.")
+   ...:     
+ValueError in our code.
+```
+
+
+> * 定义清理行为
+```
+In [4]: try:
+   ...:     raise KeyboardInterrupt
+   ...: finally:			#不管有没有发生异常，finally 子句 在程序离开 try 后都一定会被执行。当 try 语句中发生了未被 except 捕获的异常（或者它发生在 except 或 else 子句中），在 finally 子句执行完后它会被重新抛出
+   ...:     print('Goodbye')
+   ...:     
+Goodbye
+---------------------------------------------------------------------------
+KeyboardInterrupt                         Traceback (most recent call last)
+<ipython-input-4-132d568ca0fb> in <module>()
+      1 try:
+----> 2     raise KeyboardInterrupt
+      3 finally:
+      4     print('Goodbye')
+      5 
+
+KeyboardInterrupt: 
+```
