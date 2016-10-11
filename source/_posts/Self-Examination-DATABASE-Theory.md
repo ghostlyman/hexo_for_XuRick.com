@@ -227,4 +227,22 @@ tags:
 > * 索引升序排列用ASC表示
 > * 索引序列降序使用DESC表示
 
+> * SELECT ... FROM ... WHERE...
+> WHERE 子语句的条件表达式F中可以使用以下运算符
+> 算数运算符 < <= > >= = !=
+> 逻辑运算符 AND OR NOT
+> 集合成员运算符 IN NOT IN
+> 谓词 EXISTS   ALL  SOME  UNIQUE 
+> 聚合函数 AVG MIN MAX SUM COUNT 
+
+> SELECT 语句完整句法
+```
+SELECT <目标表的列名或列表达式序列> 
+FROM <基本表名和(或) 视图序列>
+[WHERE <行条件表达式>]
+[GROUP BY <列名序列>
+	[HAVING <组条件表达式>]
+[ORDER BY <列名 [ASC|DESC] >, ...]
+```
+
 
