@@ -919,4 +919,78 @@ KeyboardInterrupt:
 ---
 ## 类
 
+> * 在类的声明中，可以写任何Python，定义的函数我们称为方法
+```
+class MyClass(object):
+    i = 1234
+    def f(self):
+        return 'Hello World'
+```
+
+
+> * __init__ 方法
+> 
+> 类中的实例化使用函数符号
+> x = MyClass()    # 表示创建一个新的类实例并将该对象赋值给局部变量x
+> 
+```python
+class Complex:
+    def __init__(self, realpart, imagpart):  #__init__方法其参数可以传递到其参数上
+        self.r = realpart
+        self.i = imagpart
+
+x = Complex(3.0, -4.5)
+
+print(x.r, x.i)
+>>>
+3.0 -4.5
+```
+
+
+> * 继承
+> 当一个类继承另一个类时，它将继承父类的所有功能（如变量和方法）。这有助于重用代码。
+```python
+ass Person(object):
+    '''返回具体给定名称的Person对象'''
+    def __init__(self, name):
+        self.name = name
+
+    def get_details(self):
+        '返回包含人名的字符串'
+        return self.name
+
+class Student(Person):
+    '''返回Student对象, 采用name, branch, year 3个参数'''
+    def __init__(self, name, branch, year):
+        Person.__init__(self, name)
+        self.branch = branch
+        self.year = year
+
+    def get_details(self):
+        "返回包含学生具体信息的字符串"
+        return "{} studies {} and is in {} year.".format(self.name, self.branch, self.year)
+
+class Teacher(Person):
+    '''返回 Teacher 对象，采用字符串列表作为参数'''
+
+    def __init__(self, name, papers):
+        Person.__init__(self, name)
+        self.papers = papers
+
+    def get_details(self):
+        return "{} teachers {}".format(self.name, ','.join(self.papers))
+
+
+person1 = Person('Chinese')
+student1 = Student('Rick', 'CSE', '2015')
+teacher1 = Teacher('Sarah', ['Network', 'Python'])
+
+print(person1.get_details())
+print(student1.get_details())
+print(teacher1.get_details())
+>>>
+Chinese
+Rick studies CSE and is in 2015 year.
+Sarah teachers Network,Python
+```
 
