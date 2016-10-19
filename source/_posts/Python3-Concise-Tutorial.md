@@ -994,3 +994,340 @@ Rick studies CSE and is in 2015 year.
 Sarah teachers Network,Python
 ```
 
+> * 属性(attributes) 读取方法
+> 在 Python 里请不要使用属性（attributes）读取方法（getters 和 setters）。如果你之前学过其它语言（比如 Java），你可能会想要在你的类里面定义属性读取方法。请不要这样做，直接使用属性就可以了，就像下面这样
+
+```python
+class Student(object):
+    def __init__(self, name):
+        self.name = name
+
+std = Student('Rick')
+print(std.name)
+
+std.name = "python"
+print(std.name)
+>>>
+Rick 
+python
+```
+
+
+> * Properties 装饰器
+> @property 装饰器就是负责把一个方法变成调用的属性。
+```python
+class Account(object):
+    def __init__(self, rate):
+        self.__amt = 0
+        self.rate = rate
+
+    @property
+    def amount(self):
+        return self.__amt       #账户余额(美元)
+
+    @property
+    def rmb(self):
+        return self.__amt * self.rate   #账户余额(人民币)
+
+    @amount.setter
+    def amount(self, value):
+        if value < 0:
+            print("Sorry, no negative amount in the account.")
+            return
+        self.__amt = value
+
+
+if __name__ == '__main__':
+    acc = Account(rate=6.6) #汇率
+    acc.amount = 20
+    print('Dollar amount:', acc.amount)
+    print('I am RMB', acc.rmb)
+    acc.amount = -100
+    print('Dollar amount:', acc.amount)
+>>>
+Dollar amount: 20
+I am RMB 132.0
+Sorry, no negative amount in the account.
+Dollar amount: 20
+```
+
+
+---
+## 模块
+
+> * 模块是包括Python定义和声明的文件。
+
+> * 包： 即含有__init__.py文件的目录可以用来作为一个包，目录里所有的.py 文件都是这个包的子模块。
+> 若__init__.py含有以下内容
+```
+from mymodule.bars import simplebar
+__all__ = [simplebar, ]
+```
+> 导入时将有simplebar可用
+
+
+> * os 模块
+```
+#打印指定目录下的文件和目录名
+In [6]: def view_dir(path='.'):
+   ...:     name = os.listdir(path)
+   ...:     name.sort()
+   ...:     for i in name:
+   ...:         print(i, end=' ')
+   ...:     print()
+   ...:     
+
+In [7]: view_dir('/')
+.DS_Store .DocumentRevisions-V100 .PKInstallSandboxManager .Spotlight-V100 .Trashes .file .fseventsd .vol Applications Library Network System Users Volumes bin cores dev etc home installer.failurerequests net opt private sbin tmp usr var 
+```
+
+
+> * requests 模块
+```python
+#从指定的 URL 中下载文件的程序
+import os
+import os.path
+import requests
+
+def download(url):
+    '从指定的 URL 中下载文件并存储到当前目录'
+    req = requests.get(url)
+
+    if req.status_code == 404:
+        print('No such file fount at %s' % url)
+        return
+
+    filename = url.split('/')[-1]
+    with open(filename, 'wb') as fobj:
+        fobj.write(req.content)
+    print('Download over')
+
+if __name__ == '__main__':
+    url = input('Enter a URL: ')
+    download(url)
+```
+
+> * if __name__ == '__main__': 语句，即在当前模块名为__main__的时候(即作为脚本执行的时候) 才会执行if 块内的语句。换句话说，当文件以模块的形式导入到其他文件中时，if 块内的语句并不会执行。
+
+> * tab 依据代码历史自动补全
+```
+# ~/.pythonrc 内容
+import rlcompleter, readline
+readline.parse_and_bind('tab: complete')
+history_file = os.path.expanduser('~/.python_history')
+readline.read_history_file(history_file)
+import atexit
+atexit.register(readline.write_history_file, history_file)
+
+# 定义环境变量
+$ export PYTHONSTARTUP=~/.pythonrc
+#激活当前shell
+$ source ~/.bashrc
+```
+
+
+
+---
+## Collections 模块
+
+> * Counter 是一个有助于 hashable 对象计数的 dict 子类。它是一个无序的集合，其中 hashable 对象的元素存储为字典的键，它们的计数存储为字典的值，计数可以为任意整数，包括零和负数。
+```
+In [2]: from collections import Counter
+
+In [3]: import re
+
+In [4]: pwd
+Out[4]: '/Users/xhxu/python/magedu/System Healthy Dashboard'
+
+In [5]: path = '/Users/xhxu/python/magedu/System Healthy Dashboard/1.txt'
+In [7]: words = re.findall('\w+', open(path).read().lower())
+
+In [8]: Counter(words).most_common(10)		#most_common() 方法返回最常见的元素及其计数，顺序为最常见到最少。
+Out[8]: 
+[('x', 624),
+ ('stroke', 312),
+ ('width', 312),
+ ('fill', 312),
+ ('height', 312),
+ ('y', 312),
+ ('5', 274),
+ ('ffffff', 242),
+ ('000000', 230),
+ ('ry', 180)]
+```
+
+
+> * defaultdict 是内建dict类的子类。defaultdict() 第一个参数提供了 default_factory 属性的初始值，默认值为 None，default_factory 属性值将作为字典的默认数据类型。所有剩余的参数与字典的构造方法相同，包括关键字参数。
+```
+In [10]: from collections import defaultdict
+
+In [11]: s = [('yellow', 1), ('blue', 2), ('yellow', 3), ('blue', 4), ('red', 1)]
+
+In [12]: d = defaultdict(list)
+
+In [13]: for k,v in s:
+   ....:     d[k].append(v)
+   ....:     
+
+In [14]: d.items()
+Out[14]: dict_items([('yellow', [1, 3]), ('blue', [2, 4]), ('red', [1])])
+```
+
+
+> * namedtuple 命名元组有助于对元组每个位置赋予意义，并且让我们的代码有更好的可读性和自文档性
+```
+In [15]: from collections import namedtuple
+
+In [16]: Point = namedtuple('Point', ['x', 'y'])	#定义命名元组
+
+In [17]: p = Point(10, y=20)	#创建一个对象
+
+In [18]: p
+Out[18]: Point(x=10, y=20)
+
+In [19]: p.x + p.y
+Out[19]: 30
+
+In [20]: p[0] + p[1]	#向普通元组那样访问元素
+Out[20]: 30
+
+In [21]: x, y = p	#元组拆封
+
+In [22]: x
+Out[22]: 10
+
+In [23]: y
+Out[23]: 20
+```
+
+
+---
+## 迭代器
+
+> * Iterators 迭代器对象支持 __iter__() 返回迭代器对象自身，以及__next__() 返回迭代器下一个值
+```
+In [29]: paste
+class Counter(object):
+    def __init__(self, low, high):
+        self.current = low
+        self.high = high
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        '返回下一个值直到当前值大于 high'
+        if self.current > self.high:
+            raise StopIteration
+        else:
+            self.current += 1
+            return self.current - 1
+
+## -- End pasted text --
+
+In [30]: c = Counter(5, 10)
+
+In [31]: for i in c:
+   ....:     print(i, end=' ')
+   ....:     
+5 6 7 8 9 10 
+In [32]: c = Counter(5, 6)
+
+In [33]: next(c)
+Out[33]: 5
+
+In [34]: next(c)
+Out[34]: 6
+
+In [35]: next(c)
+---------------------------------------------------------------------------
+StopIteration                             Traceback (most recent call last)
+<ipython-input-35-73b012f9653f> in <module>()
+----> 1 next(c)
+
+<ipython-input-29-62121878b6db> in __next__(self)
+     10         '返回下一个值直到当前值大于 high'
+     11         if self.current > self.high:
+---> 12             raise StopIteration
+     13         else:
+     14             self.current += 1
+
+StopIteration: 
+```
+
+> * Generator 生成器， 是用yield 关键字完成
+> 我们通常使用生成器进行惰性求值。这样使用生成器是处理大数据的好方法。如果你不想在内存中加载所有数据，你可以使用生成器，一次只传递给你一部分数据。
+```
+In [36]: def my_generator():
+   ....:     print('Inside my generator')
+   ....:     yield 'a'
+   ....:     yield 'b'
+   ....:     yield 'c'
+   ....:     
+
+In [37]: my_generator()
+Out[37]: <generator object my_generator at 0x102f1b4c8>
+
+In [39]: for i in my_generator():
+   ....:     print(i)
+   ....:     
+Inside my generator
+a
+b
+c
+```
+
+
+> * Generator expressions 生成器表达式 是列表推导式和生成器的一个高性能，内存使用效率高的推广。
+```
+In [40]: sum([x*x for x in range(1, 10)])
+Out[40]: 285
+```
+
+
+
+> * Closures 闭包,由另外一个函数返回的函数。我们使用闭包去除重复代码
+```python
+def add_number(num):
+    def addr(number):
+        'addr 是一个闭包'
+        return num + number
+    return addr
+
+a_10 = add_number(10)
+print(a_10(21))
+print(a_10(34))
+a_5 = add_number(5)
+print(a_5(3))
+>>>
+31
+44
+8
+```
+
+> * Decorators 装饰器用来给一些对象动态的添加一些新的行为，我们使用过的闭包也是这样的
+```python
+def my_deco(func):
+    def wrapper(*args, **kwargs):
+        print('Before call')
+        result = func(*args, **kwargs)
+        print('After call')
+        return result
+    return wrapper
+
+@my_deco
+def add(a, b):
+    return a + b
+
+print(add(1, 3))
+>>>
+Before call
+After call
+4
+```
+
+
+
+
+
+
