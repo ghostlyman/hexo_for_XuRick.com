@@ -1330,4 +1330,146 @@ After call
 
 
 
+---
+## 测试
+
+> * 单元测试（英语：Unit Testing）又称为模块测试, 是针对程序模块（软件设计的最小单位）来进行正确性检验的测试工作。程序单元是应用的最小可测试部件。在过程化编程中，一个单元就是单个程序、函数、过程等；对于面向对象编程，最小单元就是方法，包括基类（超类）、抽象类、或者派生类（子类）中的方法。
+```python
+# 阶乘
+import sys
+
+def fact(n):
+    if n == 0:
+        return 1
+    return n * fact(n - 1)
+
+def div(n):
+    res = 10 / n
+    return res
+
+def main(n):
+    res = fact(n)
+    print(res)
+
+if __name__ == '__main__':
+    if len(sys.argv) > 1:
+        main(int(sys.argv[1]))
+>>>
+python factorial.py 5
+```
+```python
+# 类测试方法
+import sys
+import unittest
+from factorial import fact
+
+class TestFactorial(unittest.TestCase):
+    '基本的测试类'
+    def test_fact(self):
+        res = fact(5)
+        self.assertEqual(res, 120)
+
+if __name__ == '__main__':
+    unittest.main()
+>>>
+python factorial_test.py 
+Ran 1 test in 0.000s
+
+OK
+```
+
+#### assert 测试语句
+
+|Method|Checks that| 
+|-|-|
+|assertEqual(a, b)| a == b|
+|assertNotEqual(a, b)| a != b|
+|assertTrue(x)| bool(x) is True|
+|assertFalse(x)| bool(x) is False|
+
+
+
+---
+## 项目结构
+
+> 1. 创建项目，编写 __init__ 文件
+> $ mkdir factorial
+> $ cd factorial/
+> # 编写主代码
+> $ mkdir myfact
+> $ cd myfact
+> $ vim fact.py
+```python
+def factorial(num):
+    if num >= 0:
+        if num == 0:
+            return 1
+        return num * factorial(num - 1)
+    else:
+        return -1
+```
+> $ vim __init__.py
+```
+from fact import factorial
+__all__ = [factorial, ]
+```
+> $ cd factorial/
+> vim README.rst
+```
+README info
+```
+
+> 2. 使用 setuptools 模块，编写 setup.py 和 MANIFEST.in 文件
+> $ pip install setuptools
+> $ vim setup.py
+```
+'''Factorial project'''
+from setuptools import find_packages, setup
+
+setup(name='factorial', 
+      version='0.1', 
+      description='Factorial module', 
+      long_description='A test module ',
+      platforms=['Linux'], 
+      author='Rick Xu',
+      author_email='xuxuehua3@gmail.com', 
+      url='http://www.xurick.com', 
+      license='None',
+      packages=find_packages()
+      )
+```
+> 3. 创建源文件的发布版本
+> # 创建源文件发布版本
+> $ python setup.py sdist
+> ls dist/  # 会得到tar 压缩包
+> # 源代码安装
+> $ python setup.py install
+
+> 4. 项目注册&上传到 PyPI
+> * Go to Pypi server to register the account.
+> $ vim ~/.pypirc
+```
+[distutils]
+index-servers=
+	pypi
+[pypi]
+repository: https://testpypi.python.org/pypi
+username: INFO
+password: INFO
+```
+> $ python setup.py register -r https://testpypi.python.org/pypi
+> # 上传项目
+> $ python setup.py sdist upload -r https://testpypi.python.org/pypi
+
+
+
+
+---
+## Flask
+> * Flask 属于微框架（micro-framework）这一类别，微架构通常是很小的不依赖于外部库的框架。这既有优点也有缺点，优点是框架很轻量，更新时依赖少，并且专注安全方面的 bug，缺点是，你不得不自己做更多的工作，或通过添加插件增加自己的依赖列表。Flask 的依赖如下：
+> Werkzeug 一个 WSGI 工具包
+> jinja2 模板引擎
+> 
+> 
+> Web服务器网关接口（Python Web Server Gateway Interface，缩写为WSGI）是为Python语言定义的Web服务器和Web应用程序或框架之间的一种简单而通用的接口)。自从WSGI被开发出来以后，许多其它语言中也出现了类似接口。
 
