@@ -1,12 +1,13 @@
 ---
 title: Python-BeautifulSoup
 date: 2016-09-12 20:30:53
-tags:
+tags: [Python]
 ---
 
 ### Reference to
 [iteye.com](http://cndenis.iteye.com/blog/1746706)
 
+<!-- more -->
 ---
 ## 简介
 BeautifulSoup，美好的汤，是一个用于解析HTML文件的Python库。主页在http://www.crummy.com/software/BeautifulSoup/ 

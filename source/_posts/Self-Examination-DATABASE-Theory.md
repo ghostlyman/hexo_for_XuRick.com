@@ -1,8 +1,11 @@
 ---
 title: Self-Examination DATABASE Theory
 date: 2016-09-18 09:42:15
-tags:
+tags: [Database]
 ---
+
+## For Self-Examination
+<!-- more -->
 
 ## 1. 概述
 > * 数据库(Database DB)

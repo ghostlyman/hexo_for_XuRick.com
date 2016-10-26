@@ -1,11 +1,14 @@
 ---
 title: SVG-Usage
 date: 2016-09-19 20:35:40
-tags:
+tags: [SVG]
+#description: SVG usage and grammar.
 ---
 
 Reference to 
 [w3school.com.cn](http://www.w3school.com.cn/svg/svg_example.asp)
+
+<!-- more -->
 
 ## SVG简介
 > * SVG (Scalable Vector Graphics) 可缩放矢量图形

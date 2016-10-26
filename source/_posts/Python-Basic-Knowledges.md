@@ -1,13 +1,13 @@
 ---
 title: Python Basic Knowledges
 date: 2016-08-30 14:54:59
-tags:
+tags: [Python]
 ---
-
 Reference to:
 [saltycrane](http://www.saltycrane.com/blog/2009/05/converting-time-zones-datetime-objects-python/)
 [peiqian.net](http://peiqiang.net/2014/08/15/python-time-and-datetime.html)
 
+<!-- more -->
 ## Python 概述
 
 ## Python 语言基础

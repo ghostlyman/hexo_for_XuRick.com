@@ -8,7 +8,7 @@ subtitle:
 description: No one's born being good at all things, you become good at things through hard work.
 author: Rick Xu
 language: en
-timezone:
+timezone: PRC
 avatar: /uploads/rickxu.jpg
 #avatar:http://www.xurick.com/rickxu.jpg
 
@@ -70,8 +70,28 @@ theme: next
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-  type:
+  type: git 
+  repo: 
+    github: git@github.com:ghostlyman/ghostlyman.github.io.git
 
 
 
-duoshuo_shortname: xurick.duoshuo.com
+#duoshuo_shortname: xurick.duoshuo.com
+duoshuo_shortname: xurick
+
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000
+
+index_generator:
+  per_page: 3
+
+archive_generator:
+  per_page: 20
+  yearly: true
+  monthly: true
+
+tag_generator:
+  per_page: 10

@@ -1,13 +1,14 @@
 ---
 title: Python Regular Expression
 date: 2016-08-28 17:11:18
-tags:
+tags: [Python, Regular Expression]
 ---
 
 Reference to:
 [runoob](http://www.runoob.com/python/python-reg-expressions.html)
 [cnblogs](http://www.cnblogs.com/huxi/archive/2010/07/04/1771073.html)
 
+<!-- more -->
 
 ## Python 正则表达式
 

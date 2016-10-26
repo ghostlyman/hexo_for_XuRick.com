@@ -1,12 +1,14 @@
 ---
 title: Python3 Concise Tutorial
 date: 2016-09-14 14:32:34
-tags:
+tags: [Python]
 ---
+
 
 Reference to 
 [shiyanlou](https://www.shiyanlou.com/courses/596)
 
+<!-- more -->
 ---
 ## 循环
 
