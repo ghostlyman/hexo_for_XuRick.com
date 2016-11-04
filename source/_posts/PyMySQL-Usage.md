@@ -9,6 +9,9 @@ Reference to:
 [runoob](http://www.runoob.com/python3/python3-mysql.html)
 [pythontab](http://www.pythontab.com/html/2015/pythonjichu_1009/962.html)
 
+<!-- more -->
+
+
 ## PyMySQL
 Python 3.X 版本默认连接MySQL的一个库
 
